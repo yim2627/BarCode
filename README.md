@@ -2,6 +2,10 @@
 
 A minimal macOS menu bar TOTP (2FA) app. Click the key icon, see your codes.
 
+## Why
+
+Pulling out your phone — or opening Apple's Passwords app, hunting for the right entry, and clicking through — every time you need a 6-digit code that expires in 30 seconds gets old fast. BarCode keeps those codes one menu-bar click away on the Mac you're already using. Same Keychain backing as the rest of macOS, optional Touch ID, no phone unlock, no app-switching.
+
 ## Features
 
 - Menu bar quick access (no Dock icon, hidden by default)
