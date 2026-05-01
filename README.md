@@ -20,14 +20,27 @@ A minimal macOS menu bar TOTP (2FA) app. Click the key icon, see your codes.
 
 ## Install
 
+### Homebrew (recommended)
+
+```bash
+brew tap yim2627/tap
+brew install --cask barcode
+```
+
+That's it — the cask strips the Gatekeeper quarantine attribute on install, so the app launches cleanly with no warning. Click the 🔑 icon that appears in your menu bar and press `+` to add an account.
+
+### Manual (DMG)
+
 1. Download `BarCode.dmg` from the **[latest release](../../releases/latest)**
 2. Open the DMG and drag `BarCode.app` to `/Applications`
-3. **First launch:** right-click `BarCode.app` → **Open** → **Open**
-   (this is a one-time Gatekeeper bypass; the app is ad-hoc signed, not Apple-notarized)
-4. Click the 🔑 icon that appears in your menu bar
-5. Press `+` to add an account
+3. The app is ad-hoc signed, so macOS Sequoia (15+) blocks the first launch. Bypass once:
+   - **System Settings → Privacy & Security**, scroll to the **Security** section
+   - Click **"Open Anyway"** next to *"BarCode" was blocked from use…*
+   - Authenticate, then launch BarCode again and click **Open** in the dialog
+   - Or, in Terminal: `xattr -d com.apple.quarantine /Applications/BarCode.app`
+4. Click the 🔑 icon in your menu bar and press `+` to add an account
 
-When you add your first account, macOS shows a Keychain password prompt once. Click **Always Allow** so it doesn't ask again.
+> When you add your first account, macOS shows a Keychain password prompt once. Click **Always Allow** so it doesn't ask again.
 
 ## How to add a code
 
