@@ -46,11 +46,13 @@ struct CodeRow: View {
             confirmingDelete = true
           } label: {
             Image(systemName: "trash")
-              .foregroundStyle(.red)
+              .symbolRenderingMode(.monochrome)
+              .foregroundColor(.red)
+              .font(.system(size: 14, weight: .medium))
           }
-          .buttonStyle(.borderless)
+          .buttonStyle(.plain)
           .help("Delete")
-          .transition(.opacity.combined(with: .scale))
+          .transition(.opacity)
         }
       }
     }
