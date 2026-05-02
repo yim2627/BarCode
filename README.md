@@ -111,12 +111,6 @@ bash scripts/package.sh
 # → dist/BarCode.dmg
 ```
 
-Regenerate the app icon:
-
-```bash
-bash scripts/generate-icon.sh
-```
-
 The CI in `.github/workflows/release.yml` builds and uploads the DMG to the Releases page when a `v*` tag is pushed.
 
 ## FAQ
