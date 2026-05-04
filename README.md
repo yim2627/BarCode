@@ -1,5 +1,7 @@
 # BarCode
 
+English · [한국어](README.ko.md)
+
 A minimal macOS menu bar TOTP (2FA) app. Click the key icon, see your codes.
 
 ## Why
