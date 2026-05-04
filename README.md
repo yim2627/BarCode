@@ -13,7 +13,7 @@ Pulling out your phone — or opening Apple's Passwords app, hunting for the rig
 - 30-second countdown ring per code, auto-refresh
 - Click to copy → clipboard auto-clears 15 seconds later
 - Optional Touch ID lock (off by default; turn on in Settings)
-- Manual entry by Base32 seed or `otpauth://` URL — no QR scanner needed
+- Add accounts by Base32 seed, `otpauth://` URL, QR image, or Google Authenticator's `otpauth-migration://` export (bulk import)
 - Inline delete with confirmation
 - Local-only: no network, no analytics, no cloud sync
 
@@ -70,6 +70,23 @@ otpauth://totp/Issuer:account?secret=BASE32SECRET&issuer=Issuer&algorithm=SHA1&d
 ```
 
 Only `secret` is required; everything else is optional.
+
+### Option 4 — Reading a QR from an image
+
+Press `+`, then click **Read QR from image…**. Pick any screenshot or saved image that contains a QR — BarCode decodes it locally with Apple's Vision framework and fills the seed field for you. Single-account QRs prefill name and issuer; Authenticator migration QRs jump straight to the bulk-import preview (see Option 5).
+
+### Option 5 — Bulk import from Google Authenticator
+
+If you already have accounts in Google Authenticator on your phone, you can move them all over in one step:
+
+1. In **Google Authenticator** on your phone: tap the menu (`⋮`) → **Transfer accounts** → **Export accounts**, authenticate, and select the accounts to export.
+2. The app shows one or more **QR codes**, each containing an `otpauth-migration://offline?data=…` URL with several accounts encoded inside.
+3. Take a screenshot (or AirDrop/Continuity Camera the QR to your Mac) so the QR ends up as an image file on this machine.
+4. In BarCode, press `+` → **Read QR from image…** → pick the screenshot.
+5. BarCode shows a preview of every account in that QR. Click **Import N** to save them all to your Keychain.
+6. If Google Authenticator split your accounts across multiple QR codes, repeat for each one.
+
+> The migration URL contains every secret in plaintext. BarCode parses it locally only — never paste it into a website or share the screenshot. After you go **Back** from the preview, BarCode clears the URL from the seed field automatically.
 
 ## Security & Privacy
 
