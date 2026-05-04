@@ -3,6 +3,10 @@ import SwiftUI
 struct SettingsView: View {
 	let onDone: () -> Void
 	@AppStorage("requireAuth") private var requireAuth = false
+
+	private var appVersion: String {
+		Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+	}
 	
 	var body: some View {
 		VStack(alignment: .center) {
@@ -30,7 +34,7 @@ struct SettingsView: View {
 						HStack {
 							Text("BarCode")
 							Spacer()
-							Text("v1.0").foregroundStyle(.secondary)
+							Text("v\(appVersion)").foregroundStyle(.secondary)
 						}
 						.font(.caption)
 					}
