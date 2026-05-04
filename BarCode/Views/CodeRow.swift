@@ -9,6 +9,9 @@ struct CodeRow: View {
   @State private var copied = false
   @State private var hovering = false
   @State private var confirmingDelete = false
+  @State private var cachedSecret: Data?
+  @State private var lastCounter: UInt64 = .max
+  @State private var isAppActive: Bool = NSApp.isActive
 
   private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
@@ -75,22 +78,43 @@ struct CodeRow: View {
     }
     .animation(.easeInOut(duration: 0.15), value: hovering)
     .animation(.easeInOut(duration: 0.15), value: confirmingDelete)
-    .onAppear { refresh() }
-    .onReceive(timer) { _ in refresh() }
+    .onAppear { refresh(force: true) }
+    .onReceive(timer) { _ in if isAppActive { refresh() } }
+    .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+      isAppActive = true
+      refresh(force: true)
+    }
+    .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in
+      isAppActive = false
+    }
   }
 
-  private func refresh() {
-    guard let secret = store.secret(for: account) else {
+  /// Recomputes the displayed code and the countdown.
+  ///
+  /// HMAC + Keychain access only happen when the time-step counter
+  /// rolls over (every `period` seconds) or when explicitly forced.
+  /// In between, we only update `remaining` — cheap arithmetic — so
+  /// the ring keeps animating without burning the CPU.
+  private func refresh(force: Bool = false) {
+    if cachedSecret == nil {
+      cachedSecret = store.secret(for: account)
+    }
+    guard let secret = cachedSecret else {
       code = "ERROR"
       return
     }
-    let newCode = TOTP.code(
-      secret: secret,
-      period: account.period,
-      digits: account.digits
-    )
-    code = newCode
-    remaining = TOTP.remaining(period: account.period)
+    let now = Date()
+    let counter = UInt64(now.timeIntervalSince1970 / account.period)
+    if force || counter != lastCounter {
+      code = TOTP.code(
+        secret: secret,
+        time: now,
+        period: account.period,
+        digits: account.digits
+      )
+      lastCounter = counter
+    }
+    remaining = TOTP.remaining(time: now, period: account.period)
   }
 
   private func copy() {
