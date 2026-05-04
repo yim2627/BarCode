@@ -18,14 +18,22 @@ struct CodeRow: View {
   var body: some View {
     HStack(spacing: 12) {
       VStack(alignment: .leading, spacing: 2) {
-        Text(account.name)
-          .font(.headline)
-          .lineLimit(1)
-        if !account.issuer.isEmpty {
-          Text(account.issuer)
-            .font(.caption)
-            .foregroundStyle(.secondary)
+        // Service first (Amazon, GitHub …), account underneath (jslim, …),
+        // matching the convention Apple's Passwords app uses.
+        if account.issuer.isEmpty {
+          Text(account.name)
+            .font(.headline)
             .lineLimit(1)
+        } else {
+          Text(account.issuer)
+            .font(.headline)
+            .lineLimit(1)
+          if !account.name.isEmpty {
+            Text(account.name)
+              .font(.caption)
+              .foregroundStyle(.secondary)
+              .lineLimit(1)
+          }
         }
       }
       Spacer()

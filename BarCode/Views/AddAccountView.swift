@@ -124,14 +124,20 @@ struct AddAccountView: View {
         ForEach(Array(accounts.enumerated()), id: \.offset) { idx, acc in
           HStack(alignment: .firstTextBaseline) {
             VStack(alignment: .leading, spacing: 2) {
-              Text(acc.name.isEmpty ? "(no name)" : acc.name)
-                .font(.body)
-                .lineLimit(1)
-              if !acc.issuer.isEmpty {
-                Text(acc.issuer)
-                  .font(.caption)
-                  .foregroundStyle(.secondary)
+              if acc.issuer.isEmpty {
+                Text(acc.name.isEmpty ? "(no name)" : acc.name)
+                  .font(.body)
                   .lineLimit(1)
+              } else {
+                Text(acc.issuer)
+                  .font(.body)
+                  .lineLimit(1)
+                if !acc.name.isEmpty {
+                  Text(acc.name)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                }
               }
             }
             Spacer()
