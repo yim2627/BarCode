@@ -111,25 +111,6 @@ The app's security ultimately rests on **your macOS login password**. If your Ma
 
 If you suspect a seed has leaked, regenerate 2FA on the affected site immediately and disable the old code in BarCode.
 
-## Build from source
-
-```bash
-brew install xcodegen
-git clone https://github.com/yim2627/BarCode.git
-cd BarCode
-xcodegen generate
-open BarCode.xcodeproj
-```
-
-Build a DMG locally:
-
-```bash
-bash scripts/package.sh
-# → dist/BarCode.dmg
-```
-
-The CI in `.github/workflows/release.yml` builds and uploads the DMG to the Releases page when a `v*` tag is pushed.
-
 ## FAQ
 
 **Why no live camera QR scanner?**
