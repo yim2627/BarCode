@@ -46,3 +46,38 @@ jobs:
         with:
           files: dist/BarCode.dmg
           generate_release_notes: true
+
+      - name: Bump Homebrew tap
+        # Skips silently when the TAP_GH_TOKEN secret isn't configured
+        # so cloning the repo and running this workflow still works
+        # without it; you'll just have to bump the tap by hand.
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && env.TAP_TOKEN != '' }}
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_GH_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          SHA256=$(shasum -a 256 dist/BarCode.dmg | awk '{print $1}')
+
+          echo "Bumping yim2627/homebrew-tap to ${VERSION} (${SHA256})"
+
+          git clone --depth 1 \
+            "https://x-access-token:${TAP_TOKEN}@github.com/yim2627/homebrew-tap.git" tap-checkout
+          cd tap-checkout
+
+          sed -i.bak \
+            -e "s|^  version \".*\"|  version \"${VERSION}\"|" \
+            -e "s|^  sha256 \".*\"|  sha256 \"${SHA256}\"|" \
+            Casks/barcode.rb
+          rm Casks/barcode.rb.bak
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks/barcode.rb
+
+          if git diff --cached --quiet; then
+            echo "Tap already at ${VERSION}; nothing to push."
+          else
+            git commit -m "chore(barcode): bump to ${VERSION}"
+            git push
+          fi
