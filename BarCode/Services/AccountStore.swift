@@ -15,6 +15,31 @@ final class AccountStore: ObservableObject {
     persist()
   }
 
+  /// Adds many accounts at once. Returns the number successfully saved.
+  /// Failures (e.g. Keychain errors) are skipped rather than aborting the
+  /// whole batch.
+  @discardableResult
+  func addBatch(_ items: [(name: String, issuer: String, secret: Data, digits: Int, period: TimeInterval)]) -> Int {
+    var added = 0
+    for item in items {
+      let account = Account(
+        name: item.name,
+        issuer: item.issuer,
+        digits: item.digits,
+        period: item.period
+      )
+      do {
+        try KeychainStore.save(secret: item.secret, account: account.id.uuidString)
+        accounts.append(account)
+        added += 1
+      } catch {
+        continue
+      }
+    }
+    if added > 0 { persist() }
+    return added
+  }
+
   func remove(_ account: Account) {
     KeychainStore.delete(account: account.id.uuidString)
     accounts.removeAll { $0.id == account.id }
