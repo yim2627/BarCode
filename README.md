@@ -132,8 +132,8 @@ The CI in `.github/workflows/release.yml` builds and uploads the DMG to the Rele
 
 ## FAQ
 
-**Why no QR code scanner?**
-Keeps the app minimal and avoids requiring camera permission. Most password managers can show you the raw setup key alongside the QR.
+**Why no live camera QR scanner?**
+Keeps the app minimal and avoids requiring camera permission. If you have a QR on screen, take a screenshot and use **Read QR from image…** to decode it locally. Most setup pages also show the raw key alongside the QR.
 
 **Why not just use Passwords.app?**
 You can — Passwords.app does TOTP too. BarCode just adds menu bar quick access. The two coexist fine.
