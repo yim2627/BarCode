@@ -22,6 +22,11 @@ targets:
         CFBundleName: BarCode
         CFBundleDisplayName: BarCode
         CFBundleIconFile: AppIcon
+        # Defaults for local dev builds. CI overrides these via plutil
+        # before xcodebuild, using the git tag (e.g. v0.2.2) so the
+        # bundled plist tracks the release version.
+        CFBundleShortVersionString: "0.0.0-dev"
+        CFBundleVersion: "1"
         NSFaceIDUsageDescription: BarCode uses biometrics to protect your codes.
         LSMinimumSystemVersion: "13.0"
     settings:

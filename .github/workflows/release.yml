@@ -18,11 +18,20 @@ jobs:
       - name: Install xcodegen
         run: brew install xcodegen
 
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=0.0.0-dev" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate project
         run: xcodegen generate
 
       - name: Build & package DMG
-        run: bash scripts/package.sh
+        run: bash scripts/package.sh "${{ steps.version.outputs.version }}"
 
       - name: Upload artifact (workflow_dispatch)
         if: github.event_name == 'workflow_dispatch'

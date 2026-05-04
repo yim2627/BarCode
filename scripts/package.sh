@@ -10,10 +10,16 @@ BUILD_DIR="$ROOT/build"
 DMG_DIR="$ROOT/dist"
 DMG_NAME="${APP_NAME}.dmg"
 STAGING="$BUILD_DIR/dmg-staging"
+VERSION="${1:-}"
 
 echo "==> Cleaning"
 rm -rf "$BUILD_DIR" "$DMG_DIR/$DMG_NAME" "$STAGING"
 mkdir -p "$BUILD_DIR" "$DMG_DIR"
+
+if [ -n "$VERSION" ]; then
+  echo "==> Stamping Info.plist with version $VERSION"
+  plutil -replace CFBundleShortVersionString -string "$VERSION" "$ROOT/BarCode/Info.plist"
+fi
 
 echo "==> Building $CONFIG"
 xcodebuild \
