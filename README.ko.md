@@ -4,6 +4,8 @@
 
 macOS 메뉴바에서 바로 쓰는 TOTP(2FA) 앱입니다. 키 아이콘만 누르면 필요한 코드가 바로 보여요
 
+<img width="293" height="412" alt="image" src="https://github.com/user-attachments/assets/faabdcbf-415f-4ec2-9494-2baa17ad6891" />
+
 ## 왜 만들었나요
 
 30초마다 바뀌는 6자리 코드를 입력하려고 매번 폰을 꺼내고, Apple 암호 앱을 열고, 항목을 찾는 과정이 은근히 번거롭습니다.
