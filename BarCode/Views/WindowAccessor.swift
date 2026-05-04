@@ -22,12 +22,22 @@ final class PopoverDismisser {
   static let didClose = Notification.Name("BarCode.popoverDidClose")
   private var attached = Set<ObjectIdentifier>()
 
+  /// Set to true while the user is performing a task that requires
+  /// the popover to stay visible across focus changes (e.g. dragging
+  /// a QR screenshot in from Finder). Auto-dismiss observers no-op
+  /// while suspended.
+  private(set) var suspended = false
+
+  func suspend() { suspended = true }
+  func resume() { suspended = false }
+
   func attachIfNeeded(to window: NSWindow) {
     let id = ObjectIdentifier(window)
     guard !attached.contains(id) else { return }
     attached.insert(id)
 
-    let close: (NSWindow?) -> Void = { window in
+    let close: (NSWindow?) -> Void = { [weak self] window in
+      guard self?.suspended == false else { return }
       guard let window, window.isVisible else { return }
       window.orderOut(nil)
       NotificationCenter.default.post(name: PopoverDismisser.didClose, object: nil)
