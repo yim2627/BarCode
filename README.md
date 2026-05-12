@@ -18,6 +18,7 @@ Pulling out your phone — or opening Apple's Passwords app, hunting for the rig
 - 30-second countdown ring per code, auto-refresh
 - Click to copy → clipboard auto-clears 15 seconds later
 - Optional Touch ID lock (off by default; turn on in Settings)
+- Optional launch at login (off by default; turn on in Settings)
 - Add accounts by Base32 seed, `otpauth://` URL, QR image, or Google Authenticator's `otpauth-migration://` export (bulk import)
 - Inline delete with confirmation
 - Local-only: no network, no analytics, no cloud sync
